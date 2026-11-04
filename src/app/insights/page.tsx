@@ -2,6 +2,8 @@ import { insights } from "@/content";
 import { ArrowUpRight } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { RevealGroup } from "@/components/motion/Reveal";
+import { Spotlight } from "@/components/motion/Spotlight";
 import { TagList } from "@/components/ui/TagList";
 import { pageMetadata } from "@/lib/seo";
 
@@ -48,16 +50,18 @@ export default function InsightsPage() {
           <h2 id="planned-title" className="font-mono text-[0.72rem] tracking-[0.18em] text-mist-500 uppercase">
             In preparation
           </h2>
-          <ul className="mt-6 grid gap-px overflow-hidden rounded-[1.25rem] border border-paper-100/[0.08] bg-paper-100/[0.08] md:grid-cols-2">
+          <Spotlight className="mt-6">
+          <RevealGroup as="ul" itemAs="li" itemClassName="flex" className="grid gap-px overflow-hidden rounded-[1.25rem] border border-paper-100/[0.08] bg-paper-100/[0.08] md:grid-cols-2">
             {planned.map((item) => (
-              <li key={item.slug} data-testid="insight-planned" className="bg-navy-900 p-7">
+              <div key={item.slug} data-testid="insight-planned" data-spotlight className="w-full bg-navy-900 p-7 transition-colors hover:bg-navy-850">
                 <span className="font-mono text-[0.65rem] tracking-[0.16em] text-rose-300 uppercase">Planned</span>
                 <h3 className="mt-3 font-display text-2xl leading-snug text-paper-50">{item.title}</h3>
                 <p className="mt-2 leading-relaxed text-mist-400">{item.summary}</p>
                 <TagList items={item.topics} className="mt-5" label="Topics" />
-              </li>
+              </div>
             ))}
-          </ul>
+          </RevealGroup>
+          </Spotlight>
         </section>
       </Container>
     </>

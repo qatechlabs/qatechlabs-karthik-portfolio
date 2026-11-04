@@ -1,5 +1,7 @@
 import { caseStudies } from "@/content";
 import { CaseStudyCard } from "@/components/case-study/CaseStudyCard";
+import { Reveal } from "@/components/motion/Reveal";
+import { Spotlight } from "@/components/motion/Spotlight";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { pageMetadata } from "@/lib/seo";
@@ -20,11 +22,13 @@ export default function CaseStudiesPage() {
         intro="Each study covers the business problem, constraints, architecture, decisions, and outcomes. Client details are sanitized, and illustrative code is synthetic."
       />
       <Container className="py-20">
-        <div className="grid gap-6 lg:grid-cols-2">
+        <Spotlight className="grid gap-6 lg:grid-cols-2">
           {caseStudies.map((study, index) => (
-            <CaseStudyCard key={study.slug} study={study} index={index} headingLevel="h2" />
+            <Reveal key={study.slug} delay={(index % 2) * 0.1}>
+              <CaseStudyCard study={study} index={index} headingLevel="h2" />
+            </Reveal>
           ))}
-        </div>
+        </Spotlight>
       </Container>
     </>
   );

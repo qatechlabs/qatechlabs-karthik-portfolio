@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { PendingNote } from "@/components/ui/Pending";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { pageMetadata } from "@/lib/seo";
+import { Reveal } from "@/components/motion/Reveal";
 import { isPending } from "@/content";
 
 export const metadata = pageMetadata({
@@ -48,6 +49,7 @@ export default function AboutPage() {
             ))}
           </div>
 
+          <Reveal>
           <section aria-labelledby="approach-title" className="mt-20">
             <SectionHeading id="approach-title" eyebrow="Approach" title="How I approach a quality problem." />
             <ol className="mt-10 grid gap-px overflow-hidden rounded-[1.25rem] border border-paper-100/[0.08] bg-paper-100/[0.08] sm:grid-cols-2">
@@ -62,7 +64,9 @@ export default function AboutPage() {
               ))}
             </ol>
           </section>
+          </Reveal>
 
+          <Reveal>
           <section aria-labelledby="principles-title" className="mt-20">
             <SectionHeading id="principles-title" eyebrow="Principles" title="What I hold to." />
             <ul className="mt-8 space-y-4">
@@ -74,7 +78,9 @@ export default function AboutPage() {
               ))}
             </ul>
           </section>
+          </Reveal>
 
+          <Reveal>
           <section aria-labelledby="skills-title" className="mt-20">
             <SectionHeading id="skills-title" eyebrow="Toolkit" title="Technologies I work with." />
             <dl className="mt-8 divide-y divide-paper-100/[0.08] border-y border-paper-100/[0.08]">
@@ -86,6 +92,7 @@ export default function AboutPage() {
               ))}
             </dl>
           </section>
+          </Reveal>
 
           <div className="mt-16 flex flex-wrap gap-3">
             <ButtonLink href="/experience">

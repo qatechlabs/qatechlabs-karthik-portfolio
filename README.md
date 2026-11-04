@@ -96,7 +96,9 @@ Playwright runs on desktop Chromium and a mobile (Pixel 7) profile:
 - **Case studies:** index lists every study, every link resolves, table of contents, next-study link, and
   experience-to-case-study links.
 - **Responsiveness:** no horizontal overflow on every route at 360, 768, 1280, and 1680 px; reduced-motion
-  disables animation.
+  renders final states without animation.
+- **Interactions:** confidence stack selection (pointer and arrow keys), stat count-up, Lab filter, hide-on-scroll
+  header, reading progress, table-of-contents tracking, and the architecture pipeline.
 - **Accessibility and SEO:** axe WCAG 2.1 AA scan on every route; canonical, Open Graph, JSON-LD, sitemap,
   robots, and OG image.
 

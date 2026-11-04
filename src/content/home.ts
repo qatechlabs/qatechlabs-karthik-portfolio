@@ -36,31 +36,42 @@ export const confidenceStack: StackLayer[] = [
     id: "ai",
     name: "AI-augmented workflows",
     detail: "Test-generation and analysis tooling, reviewed by engineers",
+    tools: ["AI-assisted test design", "Agent workflows", "Test-generation workflows"],
   },
   {
     id: "gates",
     name: "Quality gates",
     detail: "CI/CD checks, SonarQube, release-readiness signals",
+    tools: ["GitHub", "CI/CD pipelines", "SonarQube"],
+    caseStudy: "financial-event-stream-validation",
   },
   {
     id: "observability",
     name: "Observability",
     detail: "Splunk and Dynatrace evidence for faster diagnosis",
+    tools: ["Splunk", "Dynatrace"],
+    caseStudy: "financial-event-stream-validation",
   },
   {
     id: "events",
     name: "Event streams",
     detail: "Kafka message validation for financial systems",
+    tools: ["Kafka"],
+    caseStudy: "financial-event-stream-validation",
   },
   {
     id: "api",
     name: "API and integrations",
     detail: "REST and SOAP contracts, Workday integrations",
+    tools: ["REST", "SOAP", "Workday Integrations"],
+    caseStudy: "workday-automation-framework",
   },
   {
     id: "ui",
     name: "UI and mobile automation",
     detail: "Playwright, Selenium, Android and iOS",
+    tools: ["Playwright", "TypeScript", "Selenium", "Android", "iOS"],
+    caseStudy: "workday-automation-framework",
   },
 ];
 

@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
 import { isPending, type CaseStudy, type MediaSlot, type Verified } from "@/content";
 import { PendingNote, VerifiedText } from "@/components/ui/Pending";
+import { Reveal } from "@/components/motion/Reveal";
 import { TagList } from "@/components/ui/TagList";
+import { PipelineFlow } from "./PipelineFlow";
 
 export const caseStudySections = [
   { id: "problem", label: "Business problem" },
@@ -44,7 +46,7 @@ function Section({ id, label, index, children }: { id: string; label: string; in
       <h2 id={`${id}-title`} className="mt-3 font-display text-[2rem] leading-tight text-paper-50">
         {label}
       </h2>
-      <div className="mt-6">{children}</div>
+      <Reveal className="mt-6">{children}</Reveal>
     </section>
   );
 }
@@ -73,33 +75,6 @@ function Bullets({ items }: { items: Verified<string>[] }) {
         </li>
       ))}
     </ul>
-  );
-}
-
-function ArchitectureFlow({ study }: { study: CaseStudy }) {
-  return (
-    <figure>
-      <ol className="grid gap-3 md:grid-flow-col md:auto-cols-fr" aria-label="Architecture stages">
-        {study.architecture.map((stage, index) => (
-          <li key={stage.label} className="relative rounded-xl border border-paper-100/10 bg-navy-900/80 p-4">
-            <p className="font-mono text-[0.65rem] tracking-[0.16em] text-rose-400 uppercase">
-              {String(index + 1).padStart(2, "0")} · {stage.label}
-            </p>
-            <ul className="mt-3 space-y-1.5 text-sm text-paper-100">
-              {stage.items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-            {index < study.architecture.length - 1 ? (
-              <span aria-hidden="true" className="absolute top-1/2 -right-2.5 hidden size-2 -translate-y-1/2 rotate-45 border-t border-r border-rose-500/70 md:block" />
-            ) : null}
-          </li>
-        ))}
-      </ol>
-      <figcaption className="mt-4 text-sm text-mist-500">
-        Conceptual flow based on the components described. It does not represent any client&rsquo;s internal architecture.
-      </figcaption>
-    </figure>
   );
 }
 
@@ -135,7 +110,7 @@ export function CaseStudyBody({ study }: { study: CaseStudy }) {
     problem: () => <Paragraphs items={study.problem} />,
     constraints: () => <Bullets items={study.constraints} />,
     approach: () => <Bullets items={study.approach} />,
-    architecture: () => <ArchitectureFlow study={study} />,
+    architecture: () => <PipelineFlow stages={study.architecture} />,
     components: () => (
       <dl className="grid gap-px overflow-hidden rounded-xl border border-paper-100/[0.08] bg-paper-100/[0.08] sm:grid-cols-2">
         {study.components.map((component) => (

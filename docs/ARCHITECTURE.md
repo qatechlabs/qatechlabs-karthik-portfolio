@@ -22,8 +22,17 @@ release confidence. It is built from HTML so it is crisp, accessible, and respon
   on every route.
 - **Layout:** `max-w-7xl` container with 20/32/48 px gutters, a `max-w-3xl` reading measure, and hairline
   dividers in place of heavy cards.
-- **Motion:** one restrained `rise` entrance, staggered on the confidence stack. Everything is disabled under
-  `prefers-reduced-motion`.
+- **Motion and interaction** (built on `motion`, in `src/components/motion/`):
+  - Hero: word-by-word headline, a pointer-following light, a slow rotating halo, and the interactive confidence
+    stack (hover, click, focus, or arrow keys select a layer; a signal climbs the spine).
+  - Scroll: sections reveal and stagger into view; stats count up; the experience timeline fills; case-study
+    pages have a reading-progress bar, a table of contents that tracks the current section, and an architecture
+    pipeline that lights up stage by stage.
+  - Pointer: cards tilt toward the cursor with a spotlight; primary calls to action are magnetic.
+  - Navigation: soft page transitions; the header hides on scroll down and returns on scroll up; the Lab filter
+    animates between states.
+  - Every effect checks `prefers-reduced-motion` (via `MotionConfig reducedMotion="user"` and `useReducedMotion`)
+    and renders the final state immediately. Touch devices skip pointer-only effects.
 - **Deliberately avoided:** neon glow, heavy glassmorphism, fake terminals, random geometry, and badge walls.
   Technologies are listed as quiet mono text.
 
@@ -73,6 +82,7 @@ canonical and Open Graph fields.
 | TypeScript 5.9, not 7.x | `typescript-eslint` and `eslint-config-next` support 5.x. TS 7 (native) is not yet supported by the lint toolchain |
 | ESLint 9 | `eslint-config-next` 16 ships for ESLint 9 |
 | Cache Components **off** | Every page is static content. With it on, `dynamicParams` is unsupported and unknown slugs return HTTP 200 with a not-found body. Off, they return a real 404 |
+| `motion` (Framer Motion successor) for interaction | Spring physics, scroll-linked values, layout animation and reduced-motion handling in one dependency |
 | No CMS or MDX | Content is small and typed. TypeScript gives compile-time checks on every edit |
 | Chromium-only E2E (desktop and mobile) | Fast, deterministic CI. Add `firefox` and `webkit` projects in `playwright.config.ts` if wanted |
 | Fonts via `next/font/google` | Self-hosted at build, no layout shift, no runtime request to Google |

@@ -4,6 +4,8 @@ import { ArrowRight, ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { PendingNote, VerifiedText } from "@/components/ui/Pending";
+import { Reveal } from "@/components/motion/Reveal";
+import { TimelineLine } from "@/components/motion/TimelineLine";
 import { TagList } from "@/components/ui/TagList";
 import { resumeLink } from "@/lib/links";
 import { pageMetadata } from "@/lib/seo";
@@ -30,16 +32,16 @@ export default function ExperiencePage() {
 
       <Container className="py-20 lg:py-28">
         <ol className="relative" data-testid="timeline">
-          <span aria-hidden="true" className="absolute top-2 bottom-2 left-[0.45rem] w-px bg-gradient-to-b from-rose-400 via-paper-100/15 to-transparent md:left-[13.45rem]" />
+          <TimelineLine className="top-2 bottom-2 left-[0.45rem] md:left-[13.45rem]" />
           {roles.map((role) => (
             <li key={role.slug} className="relative grid gap-4 pb-16 pl-10 last:pb-0 md:grid-cols-[12rem_1fr] md:gap-12 md:pl-0">
-              <span aria-hidden="true" className="absolute top-2 left-0 size-[0.95rem] rounded-full border border-rose-400 bg-navy-950 md:left-[13rem]" />
+              <span aria-hidden="true" className="absolute top-2 left-0 z-10 size-[0.95rem] rounded-full border border-rose-400 bg-navy-950 shadow-[0_0_0_4px_var(--color-navy-950)] md:left-[13rem]" />
               <div className="md:pt-1 md:text-right">
                 <p className="font-mono text-[0.72rem] tracking-[0.12em] text-mist-400">
                   <VerifiedText value={role.period} />
                 </p>
               </div>
-              <div className="md:pl-8">
+              <Reveal className="md:pl-8">
                 <h2 className="font-display text-[2rem] leading-tight text-paper-50">{role.organisation}</h2>
                 {role.client ? <p className="mt-1 text-rose-300">Client: {role.client}</p> : null}
                 <p className="mt-2 text-paper-100">
@@ -62,7 +64,7 @@ export default function ExperiencePage() {
                     </Link>
                   ) : null}
                 </div>
-              </div>
+              </Reveal>
             </li>
           ))}
         </ol>

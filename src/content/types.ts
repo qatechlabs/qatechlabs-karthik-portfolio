@@ -82,6 +82,10 @@ export type StackLayer = {
   id: string;
   name: string;
   detail: string;
+  /** Tools shown when the layer is selected in the interactive stack. */
+  tools: string[];
+  /** Case study where this layer is discussed, if any. */
+  caseStudy?: string;
 };
 
 export type Principle = {

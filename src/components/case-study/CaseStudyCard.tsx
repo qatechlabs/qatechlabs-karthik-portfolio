@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { isPending, type CaseStudy } from "@/content";
 import { ArrowRight } from "@/components/ui/ButtonLink";
+import { Tilt } from "@/components/motion/Tilt";
 import { TagList } from "@/components/ui/TagList";
 import { cn } from "@/lib/cn";
 
@@ -17,11 +18,13 @@ export function CaseStudyCard({
 }) {
   const Heading = headingLevel;
   return (
+    <Tilt className={cn("h-full", size === "large" && "lg:col-span-2")} max={size === "large" ? 2.5 : 4}>
     <article
       data-testid="case-study-card"
+      data-spotlight
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-[1.5rem] border border-paper-100/[0.08] bg-gradient-to-b from-navy-850/80 to-navy-900/60 p-7 transition-colors duration-300 hover:border-rose-500/40 sm:p-9",
-        size === "large" && "lg:col-span-2 lg:p-12",
+        "group relative flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-paper-100/[0.08] bg-gradient-to-b from-navy-850/80 to-navy-900/60 p-7 transition-colors duration-300 hover:border-rose-500/40 sm:p-9",
+        size === "large" && "lg:p-12",
       )}
     >
       <div
@@ -53,5 +56,6 @@ export function CaseStudyCard({
         </span>
       </div>
     </article>
+    </Tilt>
   );
 }

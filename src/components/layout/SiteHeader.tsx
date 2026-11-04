@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMotionValueEvent, useScroll } from "motion/react";
 import { useEffect, useId, useRef, useState } from "react";
 import type { NavItem } from "@/content/types";
 import { cn } from "@/lib/cn";
@@ -15,6 +16,16 @@ export function SiteHeader({ nav, name, role }: { nav: NavItem[]; name: string; 
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const { scrollY } = useScroll();
+
+  // Hide while scrolling down, reveal on scroll up. Never hide with the menu open.
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    setScrolled(latest > 12);
+    setHidden(latest > 160 && latest > previous && !open);
+  });
 
   useEffect(() => {
     if (!open) return;
@@ -29,7 +40,16 @@ export function SiteHeader({ nav, name, role }: { nav: NavItem[]; name: string; 
   }, [open]);
 
   return (
-    <header className="no-print sticky top-0 z-40 border-b border-paper-100/[0.07] bg-navy-950/80 backdrop-blur-md supports-[backdrop-filter]:bg-navy-950/65">
+    <header
+      data-hidden={hidden || undefined}
+      className={cn(
+        "no-print sticky top-0 z-40 border-b transition-[transform,background-color,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-within:translate-y-0",
+        hidden ? "-translate-y-full" : "translate-y-0",
+        scrolled
+          ? "border-paper-100/[0.08] bg-navy-950/80 backdrop-blur-md supports-[backdrop-filter]:bg-navy-950/65"
+          : "border-transparent bg-transparent",
+      )}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:h-[4.5rem] sm:px-8 lg:px-12">
         <Link
           href="/"
@@ -56,7 +76,7 @@ export function SiteHeader({ nav, name, role }: { nav: NavItem[]; name: string; 
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "relative rounded-full px-3.5 py-2 text-sm transition-colors",
+                      "relative rounded-full px-3.5 py-2 text-sm transition-colors hover:bg-paper-50/[0.05]",
                       active ? "text-paper-50" : "text-mist-300 hover:text-paper-50",
                     )}
                   >

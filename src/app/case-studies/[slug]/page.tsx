@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { caseStudies, getCaseStudy, isPending } from "@/content";
 import { CaseStudyBody, sectionsFor } from "@/components/case-study/CaseStudyBody";
+import { TocNav } from "@/components/case-study/TocNav";
+import { ReadingProgress } from "@/components/motion/ScrollProgress";
 import { ArrowRight, ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -34,6 +36,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
 
   return (
     <article>
+      <ReadingProgress />
       <header className="relative overflow-hidden border-b border-paper-100/[0.07]">
         <div aria-hidden="true" className="bg-blueprint absolute inset-0 opacity-70" />
         <Container className="relative pt-16 pb-16 sm:pt-24 sm:pb-20">
@@ -77,18 +80,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
 
       <Container className="grid grid-cols-1 gap-12 py-16 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-16 lg:py-20">
         <aside className="no-print hidden lg:block">
-          <nav aria-label="On this page" className="sticky top-28">
-            <p className="font-mono text-[0.68rem] tracking-[0.18em] text-mist-500 uppercase">On this page</p>
-            <ol className="mt-4 space-y-2 border-l border-paper-100/[0.08] text-sm">
-              {sections.map((section) => (
-                <li key={section.id}>
-                  <a href={`#${section.id}`} className="-ml-px block border-l border-transparent pl-4 text-mist-400 hover:border-rose-400 hover:text-paper-50">
-                    {section.label}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </nav>
+          <TocNav sections={sections.map(({ id, label }) => ({ id, label }))} />
         </aside>
 
         <div className="min-w-0 max-w-3xl">
