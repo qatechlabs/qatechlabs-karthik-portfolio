@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { resumeLink } from "@/lib/links";
 import { ConfidenceStack } from "./ConfidenceStack";
+import { IntroButton } from "@/components/guide/IntroButton";
 
 export function Hero() {
   const resume = resumeLink();
@@ -42,6 +43,7 @@ export function Hero() {
                     Explore my work <ArrowRight />
                   </ButtonLink>
                 </Magnetic>
+                <IntroButton />
                 <Magnetic strength={0.18}>
                   <ButtonLink href={site.links.github.href} variant="secondary" testId="cta-github">
                     View GitHub

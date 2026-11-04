@@ -6,17 +6,37 @@
  * Narration is written in Karthik's voice from the facts in his brief. The
  * diagrams are conceptual and contain no client data or internal architecture.
  */
+import type { SpokenLine } from "./guide";
+
 export type WalkthroughScene = {
-  id: "risk" | "framework" | "beneath" | "gates" | "ai";
+  id: "stack" | "risk" | "framework" | "beneath" | "gates" | "ai";
   kicker: string;
   title: string;
   narration: string[];
   /** Short captions shown on the diagram as its steps complete. */
   beats: string[];
+  /** What the guide says for this scene, in the third person. */
+  spoken: SpokenLine[];
   link?: { label: string; href: string };
 };
 
 export const walkthrough: WalkthroughScene[] = [
+  {
+    id: "stack",
+    kicker: "Release confidence, in order",
+    title: "Release confidence is built in layers, and in this order.",
+    narration: [
+      "Every release I stand behind rests on six layers, executed from the foundation up: UI and mobile automation, API and integrations, event streams, observability, quality gates, and AI-augmented workflows on top.",
+      "The layers below produce the evidence. The layers above decide what it means. Here is how I build each one.",
+    ],
+    beats: ["L01 UI and mobile", "L02 API and integrations", "L03 Event streams", "L04 Observability", "L05 Quality gates", "L06 AI-augmented workflows"],
+    spoken: [
+      { text: "Karthik builds release confidence in six layers, executed in order from the foundation up." },
+      { text: "Layer one: UI and mobile automation with Playwright, Selenium, Android and iOS. Layer two: API and integrations, REST and SOAP. Layer three: Kafka event streams." },
+      { text: "Layer four: observability with Splunk and Dynatrace. Layer five: quality gates in CI/CD. And on top, layer six: AI-augmented workflows, reviewed by engineers." },
+    ],
+    link: { label: "What I architect", href: "/#capabilities-title" },
+  },
   {
     id: "risk",
     kicker: "Where I start",
@@ -26,6 +46,10 @@ export const walkthrough: WalkthroughScene[] = [
       "Coverage is then designed to retire that risk, not to raise a test count.",
     ],
     beats: ["Business flows", "Dependencies", "Risk", "Coverage designed to retire it"],
+    spoken: [
+      { text: "He starts with what has to be true for a release to be safe: the business flows that matter, the integrations they depend on, and where a defect would actually hurt." },
+      { text: "Coverage is then designed to retire that risk, not to raise a test count." },
+    ],
     link: { label: "How I work", href: "/about" },
   },
   {
@@ -37,6 +61,10 @@ export const walkthrough: WalkthroughScene[] = [
       "I moved that variation out of the tests and into configuration, so one business process is written once and runs everywhere, in parallel, across browsers.",
     ],
     beats: ["One test, written once", "Country profiles", "Tenant targets", "Parallel, cross-browser runs"],
+    spoken: [
+      { text: "At Zensar Technologies, on a global Workday programme, the same hiring or payroll process behaves differently per country and per tenant." },
+      { text: "Karthik moved that variation out of the tests and into configuration, so one business process is written once and runs everywhere, in parallel, across browsers." },
+    ],
     link: { label: "Workday framework case study", href: "/case-studies/workday-automation-framework" },
   },
   {
@@ -48,6 +76,10 @@ export const walkthrough: WalkthroughScene[] = [
       "I validate what was published, what was consumed, and what changed, and I use Splunk and Dynatrace evidence to trace a failure to the message where it began.",
     ],
     beats: ["Event published", "Consumed downstream", "State verified", "Traced in observability"],
+    spoken: [
+      { text: "With Mphasis, at JPMorgan Chase, he proved behaviour beneath the user interface, where the business rules execute." },
+      { text: "He validated what was published to Kafka, what was consumed, and what changed, and used Splunk and Dynatrace evidence to trace a failure to the message where it began." },
+    ],
     link: { label: "Event-stream case study", href: "/case-studies/financial-event-stream-validation" },
   },
   {
@@ -59,6 +91,10 @@ export const walkthrough: WalkthroughScene[] = [
       "A build carries a clear signal about whether it is ready. People stop overriding a gate once it has earned their trust.",
     ],
     beats: ["Change", "Lint and types", "Parallel tests", "Quality gate", "Release"],
+    spoken: [
+      { text: "Every change passes through gates the team can trust: linting, parallel test workers, API checks, and static analysis with SonarQube." },
+      { text: "A build carries a clear signal about whether it is ready. People stop overriding a gate once it has earned their trust." },
+    ],
     link: { label: "Case studies", href: "/case-studies" },
   },
   {
@@ -70,6 +106,10 @@ export const walkthrough: WalkthroughScene[] = [
       "In my workflows the engineer reviews what it proposes and the pass or fail decision is never left to a model. AI amplifies judgment; it does not replace the person accountable for the release.",
     ],
     beats: ["AI proposes", "Engineer reviews", "Deterministic assertion", "Accountable release"],
+    spoken: [
+      { text: "Today Karthik lets AI draft and triage: proposing tests, generating API scenarios, and summarising failures." },
+      { text: "The engineer reviews what it proposes, and the pass or fail decision is never left to a model. AI amplifies judgment; it does not replace the person accountable for the release." },
+    ],
     link: { label: "Engineering Lab", href: "/lab" },
   },
 ];

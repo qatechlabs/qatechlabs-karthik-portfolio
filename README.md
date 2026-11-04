@@ -39,7 +39,8 @@ edit the content without touching any UI code.
 | --- | --- |
 | `site.ts` | Name, roles, navigation, GitHub/LinkedIn/email, résumé PDF path |
 | `home.ts` | Homepage figures, confidence stack layers, capabilities, principles |
-| `walkthrough.ts` | The narrated walkthrough: scene titles, narration, beats, and links |
+| `walkthrough.ts` | The narrated walkthrough: scene titles, narration, beats, spoken lines, and links |
+| `guide.ts` | The spoken guide's introduction script and interface prompts |
 | `experience.ts` | Roles (titles, dates, highlights), skills, credentials |
 | `case-studies.ts` | Case studies: problem, constraints, approach, components, decisions, outcomes, media |
 | `lab.ts` | Engineering Lab entries and their status |
@@ -58,6 +59,14 @@ Anything that has not been verified is wrapped in `pending("what to add")`. Pend
 
 Rules: do not add figures, dates, endorsements, or repository links that can't be verified. Code samples in case
 studies are synthetic and labelled as illustrative. No client data, internal architecture, or proprietary code.
+
+### Voice
+
+The guide uses the browser's speech synthesis, so the voice depends on the visitor's device. To ship a consistent,
+recorded voice instead, generate one MP3 per line (any text-to-speech service or a human recording), put the files
+under `public/audio/`, and add `audio: "/audio/<file>.mp3"` to the matching line in `guide.ts` or `walkthrough.ts`.
+The guide speaks as a narrator in the third person; keep it that way so a synthetic voice is never presented as
+Karthik's own.
 
 ### Assets
 
@@ -101,6 +110,9 @@ Playwright runs on desktop Chromium and a mobile (Pixel 7) profile:
 - **Walkthrough:** scenes change with position and link to the right case study, the final diagram finishes
   drawing, dots and arrow keys jump between scenes, Play advances and manual input pauses it, and reduced motion
   lays every scene out with finished diagrams.
+- **Guide and stack order:** the stack executes L01 → L06 then hands over control, Replay restarts it, the hero
+  button opens the guide and speaks the introduction with captions, narration follows walkthrough scenes, and
+  reduced motion shows the stack complete.
 - **Interactions:** confidence stack selection (pointer and arrow keys), stat count-up, Lab filter, reading
   progress, table-of-contents tracking, and the architecture pipeline.
 - **Accessibility and SEO:** axe WCAG 2.1 AA scan on every route; canonical, Open Graph, JSON-LD, sitemap,

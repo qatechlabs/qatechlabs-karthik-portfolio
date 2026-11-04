@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useInView } from "motion/react";
 import type { StackLayer } from "@/content/types";
 import { ArrowRight } from "@/components/ui/ButtonLink";
 import { cn } from "@/lib/cn";
@@ -20,21 +21,66 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export function ConfidenceStack({ layers }: { layers: StackLayer[] }) {
   const reduce = useReducedMotion();
   const total = layers.length;
-  const [active, setActive] = useState(layers[0]?.id);
+  const [active, setActive] = useState(layers[total - 1]?.id);
+  const [sequencing, setSequencing] = useState(!reduce);
+  const [done, setDone] = useState<Set<string>>(() => new Set(reduce ? layers.map((l) => l.id) : []));
   const activeLayer = layers.find((layer) => layer.id === active) ?? layers[0];
+  const figureRef = useRef<HTMLElement>(null);
+  const inView = useInView(figureRef, { once: true, amount: 0.4 });
+  const timers = useRef<number[]>([]);
+
+  // Execution order: L01 at the bottom first, up to L06. Plays once, then the visitor is in control.
+  const runSequence = () => {
+    timers.current.forEach((t) => window.clearTimeout(t));
+    timers.current = [];
+    setDone(new Set());
+    setSequencing(true);
+    const order = [...layers].reverse();
+    order.forEach((layer, step) => {
+      timers.current.push(
+        window.setTimeout(() => {
+          setActive(layer.id);
+          setDone((prev) => new Set(prev).add(layer.id));
+          if (step === order.length - 1) timers.current.push(window.setTimeout(() => setSequencing(false), 900));
+        }, 500 + step * 1150),
+      );
+    });
+  };
+
+  useEffect(() => {
+    if (reduce || !inView) return;
+    const kick = window.setTimeout(runSequence, 0);
+    const current = timers.current;
+    return () => {
+      window.clearTimeout(kick);
+      current.forEach((t) => window.clearTimeout(t));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once when the stack scrolls into view
+  }, [inView, reduce]);
+
+  const takeControl = (id: string) => {
+    if (sequencing) {
+      timers.current.forEach((t) => window.clearTimeout(t));
+      setSequencing(false);
+      setDone(new Set(layers.map((l) => l.id)));
+    }
+    setActive(id);
+  };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
     const delta = event.key === "ArrowDown" ? 1 : event.key === "ArrowUp" ? -1 : 0;
     if (!delta) return;
     event.preventDefault();
     const next = layers[(index + delta + total) % total];
-    setActive(next.id);
+    takeControl(next.id);
     document.getElementById(`stack-${next.id}`)?.focus();
   };
 
   return (
     <figure
+      ref={figureRef}
       aria-labelledby="stack-caption"
+      data-sequencing={sequencing || undefined}
       className="relative rounded-[1.75rem] border border-paper-100/10 bg-gradient-to-b from-navy-850/90 to-navy-900/70 p-6 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)] backdrop-blur-sm sm:p-8"
     >
       <div aria-hidden="true" className="hairline absolute inset-x-10 top-0 opacity-60" />
@@ -43,7 +89,13 @@ export function ConfidenceStack({ layers }: { layers: StackLayer[] }) {
           <span aria-hidden="true" className="size-1.5 rounded-full bg-rose-400" />
           Release confidence
         </span>
-        <span>Select a layer</span>
+        {sequencing ? (
+          <span className="text-rose-300">Executing L01 → L06</span>
+        ) : (
+          <button type="button" onClick={runSequence} data-testid="stack-replay" className="text-mist-400 hover:text-paper-50">
+            Replay L01 → L06
+          </button>
+        )}
       </div>
 
       <ol className="relative mt-6 space-y-2" data-testid="confidence-stack">
@@ -53,6 +105,7 @@ export function ConfidenceStack({ layers }: { layers: StackLayer[] }) {
         />
         {layers.map((layer, index) => {
           const isActive = layer.id === active;
+          const isDone = done.has(layer.id);
           return (
             <motion.li
               key={layer.id}
@@ -65,13 +118,13 @@ export function ConfidenceStack({ layers }: { layers: StackLayer[] }) {
                 aria-hidden="true"
                 className={cn(
                   "relative z-10 flex size-[0.9375rem] shrink-0 items-center justify-center rounded-full border transition-colors duration-300",
-                  isActive ? "border-rose-400 bg-burgundy-800" : "border-mist-500/60 bg-navy-900",
+                  isActive ? "border-rose-400 bg-burgundy-800" : isDone ? "border-rose-500/70 bg-navy-900" : "border-mist-500/60 bg-navy-900",
                 )}
               >
                 <span
                   className={cn(
                     "rounded-full transition-all duration-300",
-                    isActive ? "size-1.5 bg-rose-300 shadow-[0_0_10px_2px_rgba(219,173,150,0.7)]" : "size-1 bg-mist-400",
+                    isActive ? "size-1.5 bg-rose-300 shadow-[0_0_10px_2px_rgba(219,173,150,0.7)]" : isDone ? "size-1.5 bg-rose-400" : "size-1 bg-mist-400",
                   )}
                 />
               </span>
@@ -80,15 +133,17 @@ export function ConfidenceStack({ layers }: { layers: StackLayer[] }) {
                 type="button"
                 aria-pressed={isActive}
                 aria-controls="stack-detail"
-                onClick={() => setActive(layer.id)}
-                onMouseEnter={() => setActive(layer.id)}
-                onFocus={() => setActive(layer.id)}
+                onClick={() => takeControl(layer.id)}
+                onMouseEnter={() => takeControl(layer.id)}
+                onFocus={() => takeControl(layer.id)}
                 onKeyDown={(event) => onKeyDown(event, index)}
                 className={cn(
                   "group min-w-0 flex-1 rounded-xl border px-4 py-3 text-left transition-[border-color,background-color,transform] duration-300",
                   isActive
                     ? "translate-x-1 border-rose-500/45 bg-burgundy-900/35"
-                    : "border-paper-100/[0.07] bg-navy-950/40 hover:border-rose-500/30",
+                    : isDone
+                      ? "border-rose-500/25 bg-navy-950/40 hover:border-rose-500/40"
+                      : "border-paper-100/[0.07] bg-navy-950/40 opacity-60 hover:border-rose-500/30",
                 )}
               >
                 <span className="flex items-baseline justify-between gap-3">

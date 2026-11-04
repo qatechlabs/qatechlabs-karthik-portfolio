@@ -28,6 +28,15 @@ release confidence. It is built from HTML so it is crisp, accessible, and respon
   step with their position, so it reads as Karthik explaining his work. "Play" advances it automatically at a
   reading pace; scene dots and arrow keys jump between scenes. Narration and beats live in
   `src/content/walkthrough.ts`; diagrams are inline SVG driven by `motion` values.
+- **Execution order:** the hero's confidence stack plays once from L01 (UI and mobile) up to L06 (AI-augmented
+  workflows) when it scrolls into view, then hands control to the visitor, with a Replay control. The same order
+  opens the walkthrough as scene 01.
+- **Spoken guide** (`src/components/guide/`): an animated presenter (blinking eyes, mouth that follows the speech, a
+  pointer arm that lifts while explaining) with live captions. It introduces the profile from the hero button and
+  can narrate the walkthrough scene by scene. The guide speaks in the third person as a narrator, so no synthetic
+  voice impersonates Karthik. Speech uses the browser's speech synthesis by default; any line can point at a
+  recorded file (`audio: "/audio/….mp3"`) in `src/content/guide.ts` or `src/content/walkthrough.ts`. Speech is
+  always started by the visitor, never on page load. Script lives in content, not components.
 - **Other motion:** continuous and scroll-linked only. The confidence stack is an interactive control, cards tilt
   toward the pointer with a spotlight, figures count up once, the experience timeline fills, case studies have a
   reading-progress bar, a tracking table of contents, and an architecture pipeline that lights up once. Section

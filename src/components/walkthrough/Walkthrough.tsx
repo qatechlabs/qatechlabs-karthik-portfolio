@@ -13,8 +13,12 @@ import { BeneathScene } from "./scenes/BeneathScene";
 import { FrameworkScene } from "./scenes/FrameworkScene";
 import { GatesScene } from "./scenes/GatesScene";
 import { RiskScene } from "./scenes/RiskScene";
+import { StackScene } from "./scenes/StackScene";
+import { guide } from "@/content/guide";
+import { setNarrating, speak, useGuide } from "@/components/guide/guide-store";
 
 const diagrams: Record<WalkthroughScene["id"], ComponentType<SceneProps>> = {
+  stack: StackScene,
   risk: RiskScene,
   framework: FrameworkScene,
   beneath: BeneathScene,
@@ -26,6 +30,8 @@ const diagrams: Record<WalkthroughScene["id"], ComponentType<SceneProps>> = {
 const SCENE_VH = 1.5;
 /** Seconds per scene when the walkthrough is played. */
 const PLAY_SECONDS = 9;
+/** Seconds per scene when the guide is also narrating. */
+const PLAY_SECONDS_NARRATED = 14;
 
 /**
  * A guided, narrated walkthrough. The stage stays pinned while the visitor
@@ -47,6 +53,13 @@ function ScrollWalkthrough({ scenes }: { scenes: WalkthroughScene[] }) {
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const playRef = useRef<number | null>(null);
+  const { narrating } = useGuide();
+
+  // When the visitor asked for narration, the guide speaks each scene as it arrives.
+  useEffect(() => {
+    if (!narrating) return;
+    void speak(scenes[index].spoken);
+  }, [index, narrating, scenes]);
 
   useMotionValueEvent(scrollYProgress, "change", (p) => {
     setIndex(Math.min(count - 1, Math.max(0, Math.floor(p * count + 0.0001))));
@@ -82,7 +95,8 @@ function ScrollWalkthrough({ scenes }: { scenes: WalkthroughScene[] }) {
     const start = index >= count - 1 ? sceneTop(0) : window.scrollY;
     const end = el.offsetTop + el.offsetHeight - window.innerHeight;
     const distance = end - start;
-    const duration = (distance / ((el.offsetHeight - window.innerHeight) / count)) * PLAY_SECONDS * 1000;
+    const seconds = narrating ? PLAY_SECONDS_NARRATED : PLAY_SECONDS;
+    const duration = (distance / ((el.offsetHeight - window.innerHeight) / count)) * seconds * 1000;
     const t0 = performance.now();
     setPlaying(true);
     const tick = (now: number) => {
@@ -93,7 +107,7 @@ function ScrollWalkthrough({ scenes }: { scenes: WalkthroughScene[] }) {
     };
     window.scrollTo(0, start);
     playRef.current = requestAnimationFrame(tick);
-  }, [count, index, sceneTop, stopPlaying]);
+  }, [count, index, narrating, sceneTop, stopPlaying]);
 
   // Any manual input hands control back to the visitor.
   useEffect(() => {
@@ -137,7 +151,10 @@ function ScrollWalkthrough({ scenes }: { scenes: WalkthroughScene[] }) {
             <h2 id="walkthrough-title" className="font-mono text-[0.7rem] tracking-[0.22em] text-rose-400 uppercase">
               How I build release confidence
             </h2>
-            <PlayButton playing={playing} onClick={playing ? stopPlaying : play} />
+            <div className="flex items-center gap-2">
+              <VoiceButton narrating={narrating} onClick={() => setNarrating(!narrating)} />
+              <PlayButton playing={playing} onClick={playing ? stopPlaying : play} />
+            </div>
           </div>
 
           <div
@@ -286,6 +303,28 @@ function PlayButton({ playing, onClick }: { playing: boolean; onClick: () => voi
         {playing ? <path d="M2 1h3v10H2zM7 1h3v10H7z" /> : <path d="M2.5 1.5v9l7.5-4.5z" />}
       </svg>
       {playing ? "Pause" : "Play the walkthrough"}
+    </button>
+  );
+}
+
+function VoiceButton({ narrating, onClick }: { narrating: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      data-testid="walkthrough-voice"
+      aria-pressed={narrating}
+      className={cn(
+        "inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-sm transition-colors",
+        narrating ? "border-rose-400 text-rose-200" : "border-paper-100/15 text-paper-50 hover:border-rose-400/60",
+      )}
+    >
+      <svg aria-hidden="true" viewBox="0 0 16 16" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M2 6v4h3l4 3V3L5 6H2z" strokeLinejoin="round" />
+        {narrating ? <path d="M11 5.5a3.5 3.5 0 0 1 0 5M13 3.5a6 6 0 0 1 0 9" strokeLinecap="round" /> : <path d="M11 6l3 4M14 6l-3 4" strokeLinecap="round" />}
+      </svg>
+      <span className="hidden sm:inline">{narrating ? guide.prompts.narrateOff : guide.prompts.narrateOn}</span>
+      <span className="sm:hidden">{narrating ? "Voice on" : "Voice off"}</span>
     </button>
   );
 }

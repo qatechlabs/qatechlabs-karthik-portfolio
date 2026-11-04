@@ -4,6 +4,7 @@ import { Hero } from "@/components/home/Hero";
 import { CapabilitiesSection, CareerSnapshot, ContactBand, FeaturedWork, PrinciplesSection } from "@/components/home/Sections";
 import { StatsBand } from "@/components/home/StatsBand";
 import { Walkthrough } from "@/components/walkthrough/Walkthrough";
+import { Guide } from "@/components/guide/Guide";
 
 const personJsonLd = {
   "@context": "https://schema.org",
@@ -28,6 +29,7 @@ export default function HomePage() {
       <PrinciplesSection principles={principles} />
       <CareerSnapshot roles={roles} />
       <ContactBand />
+      <Guide />
     </>
   );
 }
