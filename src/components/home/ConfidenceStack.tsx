@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { StackLayer } from "@/content/types";
 import { ArrowRight } from "@/components/ui/ButtonLink";
 import { cn } from "@/lib/cn";
@@ -21,15 +21,7 @@ export function ConfidenceStack({ layers }: { layers: StackLayer[] }) {
   const reduce = useReducedMotion();
   const total = layers.length;
   const [active, setActive] = useState(layers[0]?.id);
-  const [pulse, setPulse] = useState(total - 1);
   const activeLayer = layers.find((layer) => layer.id === active) ?? layers[0];
-
-  // A signal climbs from the foundation to the top layer, then repeats.
-  useEffect(() => {
-    if (reduce) return;
-    const id = window.setInterval(() => setPulse((p) => (p <= 0 ? total - 1 : p - 1)), 650);
-    return () => window.clearInterval(id);
-  }, [reduce, total]);
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
     const delta = event.key === "ArrowDown" ? 1 : event.key === "ArrowUp" ? -1 : 0;
@@ -48,10 +40,7 @@ export function ConfidenceStack({ layers }: { layers: StackLayer[] }) {
       <div aria-hidden="true" className="hairline absolute inset-x-10 top-0 opacity-60" />
       <div className="flex items-center justify-between font-mono text-[0.68rem] tracking-[0.2em] text-mist-400 uppercase">
         <span className="flex items-center gap-2">
-          <span aria-hidden="true" className="relative flex size-1.5">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-rose-400 opacity-60 motion-reduce:hidden" />
-            <span className="relative inline-flex size-1.5 rounded-full bg-rose-400" />
-          </span>
+          <span aria-hidden="true" className="size-1.5 rounded-full bg-rose-400" />
           Release confidence
         </span>
         <span>Select a layer</span>
@@ -64,26 +53,25 @@ export function ConfidenceStack({ layers }: { layers: StackLayer[] }) {
         />
         {layers.map((layer, index) => {
           const isActive = layer.id === active;
-          const isPulsing = index === pulse;
           return (
             <motion.li
               key={layer.id}
               className="relative flex items-center gap-4"
-              initial={reduce ? false : { opacity: 0, y: 22, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.7, ease, delay: 0.35 + (total - 1 - index) * 0.11 }}
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease, delay: 0.3 + (total - 1 - index) * 0.08 }}
             >
               <span
                 aria-hidden="true"
                 className={cn(
                   "relative z-10 flex size-[0.9375rem] shrink-0 items-center justify-center rounded-full border transition-colors duration-300",
-                  isActive || isPulsing ? "border-rose-400 bg-burgundy-800" : "border-mist-500/60 bg-navy-900",
+                  isActive ? "border-rose-400 bg-burgundy-800" : "border-mist-500/60 bg-navy-900",
                 )}
               >
                 <span
                   className={cn(
                     "rounded-full transition-all duration-300",
-                    isActive || isPulsing ? "size-1.5 bg-rose-300 shadow-[0_0_10px_2px_rgba(219,173,150,0.7)]" : "size-1 bg-mist-400",
+                    isActive ? "size-1.5 bg-rose-300 shadow-[0_0_10px_2px_rgba(219,173,150,0.7)]" : "size-1 bg-mist-400",
                   )}
                 />
               </span>

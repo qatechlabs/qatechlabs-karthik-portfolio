@@ -1,7 +1,6 @@
 import { confidenceStack, site } from "@/content";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { Reveal } from "@/components/motion/Reveal";
-import { SplitWords } from "@/components/motion/SplitWords";
 import { Spotlight } from "@/components/motion/Spotlight";
 import { ArrowRight, ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
@@ -15,7 +14,6 @@ export function Hero() {
     <section aria-labelledby="hero-title" className="relative overflow-hidden">
       <Spotlight className="spotlight-hero relative">
         <div aria-hidden="true" className="bg-blueprint absolute inset-0" />
-        <div aria-hidden="true" className="hero-orbit pointer-events-none absolute -top-40 right-[-10rem] size-[42rem] rounded-full" />
         <Container className="relative grid items-center gap-14 pt-16 pb-20 sm:pt-24 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:pt-28 lg:pb-28">
           <div>
             <Reveal>
@@ -24,12 +22,11 @@ export function Hero() {
               </Eyebrow>
             </Reveal>
             <h1 id="hero-title" className="mt-6 font-display text-display font-normal tracking-tight text-paper-50">
-              <SplitWords text="I architect the systems that let teams" delay={0.1} />{" "}
-              <em className="text-rose-300 italic">
-                <SplitWords text="release with confidence." delay={0.55} wordClassName="shimmer-text" />
-              </em>
+              <Reveal as="div" className="contents">
+                I architect the systems that let teams <em className="text-rose-300 italic">release with confidence.</em>
+              </Reveal>
             </h1>
-            <Reveal delay={0.5}>
+            <Reveal delay={0.15}>
               <p className="mt-7 max-w-xl text-lg leading-relaxed text-mist-300">
                 {site.role} and Senior SDET with {site.yearsOfExperience} years in enterprise test automation:
                 Playwright and TypeScript frameworks for global Workday, Kafka event validation for financial
@@ -38,7 +35,7 @@ export function Hero() {
               </p>
             </Reveal>
 
-            <Reveal delay={0.7}>
+            <Reveal delay={0.25}>
               <div className="mt-10 flex flex-wrap items-center gap-3">
                 <Magnetic>
                   <ButtonLink href="/case-studies" testId="cta-explore">
@@ -61,7 +58,7 @@ export function Hero() {
               </div>
             </Reveal>
 
-            <Reveal delay={0.85}>
+            <Reveal delay={0.35}>
               <dl className="mt-12 flex flex-wrap gap-x-10 gap-y-4 border-t border-paper-100/[0.08] pt-6 text-sm">
                 <div>
                   <dt className="font-mono text-[0.68rem] tracking-[0.18em] text-mist-500 uppercase">Based in</dt>
@@ -77,18 +74,8 @@ export function Hero() {
 
           <ConfidenceStack layers={confidenceStack} />
         </Container>
-        <ScrollCue />
       </Spotlight>
     </section>
   );
 }
 
-function ScrollCue() {
-  return (
-    <div aria-hidden="true" className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 lg:block">
-      <span className="flex h-10 w-6 justify-center rounded-full border border-paper-100/20 pt-2">
-        <span className="scroll-cue-dot size-1 rounded-full bg-rose-300" />
-      </span>
-    </div>
-  );
-}

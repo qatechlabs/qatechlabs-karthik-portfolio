@@ -1,40 +1,31 @@
 "use client";
 
 import { motion, useInView, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import type { DiagramStage } from "@/content/types";
 import { cn } from "@/lib/cn";
 
 /**
- * Architecture stages that light up in sequence when scrolled into view, with
- * a signal that keeps flowing through the pipeline.
+ * Architecture stages that light up once, in sequence, when scrolled into view.
  */
 export function PipelineFlow({ stages }: { stages: DiagramStage[] }) {
   const ref = useRef<HTMLOListElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -15% 0px" });
   const reduce = useReducedMotion();
-  const [step, setStep] = useState(-1);
-
-  useEffect(() => {
-    if (!inView || reduce) return;
-    const id = window.setInterval(() => setStep((s) => (s + 1) % (stages.length + 2)), 700);
-    return () => window.clearInterval(id);
-  }, [inView, reduce, stages.length]);
 
   return (
     <figure>
       <ol ref={ref} className="grid gap-3 md:grid-flow-col md:auto-cols-fr" aria-label="Architecture stages" data-testid="pipeline">
         {stages.map((stage, index) => {
-          const lit = reduce || step >= index;
-          const current = step === index;
+          const lit = reduce || inView;
           return (
             <motion.li
               key={stage.label}
               className={cn(
-                "relative rounded-xl border p-4 transition-[border-color,background-color,box-shadow] duration-500",
+                "relative rounded-xl border p-4 transition-[border-color,background-color] duration-700",
                 lit ? "border-rose-500/40 bg-navy-850" : "border-paper-100/10 bg-navy-900/80",
-                current && "shadow-[0_0_0_1px_rgba(219,173,150,0.35),0_12px_40px_-12px_rgba(201,150,126,0.45)]",
               )}
+              style={{ transitionDelay: `${index * 180}ms` }}
               initial={reduce ? false : { opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : undefined}
               transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
@@ -50,10 +41,8 @@ export function PipelineFlow({ stages }: { stages: DiagramStage[] }) {
               {index < stages.length - 1 ? (
                 <span aria-hidden="true" className="absolute top-1/2 -right-3 z-10 hidden h-px w-3 bg-paper-100/15 md:block">
                   <span
-                    className={cn(
-                      "absolute inset-y-0 left-0 bg-rose-400 transition-[width] duration-500",
-                      step > index || reduce ? "w-full" : "w-0",
-                    )}
+                    className={cn("absolute inset-y-0 left-0 bg-rose-400 transition-[width] duration-500", lit ? "w-full" : "w-0")}
+                    style={{ transitionDelay: `${index * 180 + 300}ms` }}
                   />
                 </span>
               ) : null}

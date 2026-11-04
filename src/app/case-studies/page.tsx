@@ -22,13 +22,13 @@ export default function CaseStudiesPage() {
         intro="Each study covers the business problem, constraints, architecture, decisions, and outcomes. Client details are sanitized, and illustrative code is synthetic."
       />
       <Container className="py-20">
+        <Reveal>
         <Spotlight className="grid gap-6 lg:grid-cols-2">
           {caseStudies.map((study, index) => (
-            <Reveal key={study.slug} delay={(index % 2) * 0.1}>
-              <CaseStudyCard study={study} index={index} headingLevel="h2" />
-            </Reveal>
+            <CaseStudyCard key={study.slug} study={study} index={index} headingLevel="h2" />
           ))}
         </Spotlight>
+        </Reveal>
       </Container>
     </>
   );

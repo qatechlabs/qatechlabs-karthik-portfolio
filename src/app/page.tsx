@@ -1,13 +1,9 @@
 import { capabilities, featuredCaseStudies, principles, roles, site, stats } from "@/content";
+import { walkthrough } from "@/content/walkthrough";
 import { Hero } from "@/components/home/Hero";
-import {
-  CapabilitiesSection,
-  CareerSnapshot,
-  ContactBand,
-  FeaturedWork,
-  PrinciplesSection,
-} from "@/components/home/Sections";
+import { CapabilitiesSection, CareerSnapshot, ContactBand, FeaturedWork, PrinciplesSection } from "@/components/home/Sections";
 import { StatsBand } from "@/components/home/StatsBand";
+import { Walkthrough } from "@/components/walkthrough/Walkthrough";
 
 const personJsonLd = {
   "@context": "https://schema.org",
@@ -23,11 +19,9 @@ const personJsonLd = {
 export default function HomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
       <Hero />
+      <Walkthrough scenes={walkthrough} />
       <StatsBand stats={stats} />
       <FeaturedWork studies={featuredCaseStudies} />
       <CapabilitiesSection capabilities={capabilities} />

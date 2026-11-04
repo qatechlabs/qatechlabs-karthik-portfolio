@@ -34,8 +34,6 @@ test("reduced motion renders content in its final state", async ({ browser }) =>
   await page.goto("/");
   const layer = page.getByTestId("confidence-stack").locator("li").first();
   await expect(layer).toHaveCSS("opacity", "1");
-  const orbit = await page.locator(".hero-orbit").evaluate((el) => parseFloat(getComputedStyle(el).animationDuration));
-  expect(orbit).toBeLessThan(0.01);
   // Count-up figures show their real value immediately.
   await expect(page.getByText("40%", { exact: true })).toBeVisible();
   await context.close();

@@ -16,16 +16,10 @@ export function SiteHeader({ nav, name, role }: { nav: NavItem[]; name: string; 
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
 
-  // Hide while scrolling down, reveal on scroll up. Never hide with the menu open.
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() ?? 0;
-    setScrolled(latest > 12);
-    setHidden(latest > 160 && latest > previous && !open);
-  });
+  useMotionValueEvent(scrollY, "change", (latest) => setScrolled(latest > 12));
 
   useEffect(() => {
     if (!open) return;
@@ -41,10 +35,8 @@ export function SiteHeader({ nav, name, role }: { nav: NavItem[]; name: string; 
 
   return (
     <header
-      data-hidden={hidden || undefined}
       className={cn(
-        "no-print sticky top-0 z-40 border-b transition-[transform,background-color,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-within:translate-y-0",
-        hidden ? "-translate-y-full" : "translate-y-0",
+        "no-print sticky top-0 z-40 border-b transition-[background-color,border-color] duration-500",
         scrolled
           ? "border-paper-100/[0.08] bg-navy-950/80 backdrop-blur-md supports-[backdrop-filter]:bg-navy-950/65"
           : "border-transparent bg-transparent",

@@ -39,6 +39,7 @@ edit the content without touching any UI code.
 | --- | --- |
 | `site.ts` | Name, roles, navigation, GitHub/LinkedIn/email, résumé PDF path |
 | `home.ts` | Homepage figures, confidence stack layers, capabilities, principles |
+| `walkthrough.ts` | The narrated walkthrough: scene titles, narration, beats, and links |
 | `experience.ts` | Roles (titles, dates, highlights), skills, credentials |
 | `case-studies.ts` | Case studies: problem, constraints, approach, components, decisions, outcomes, media |
 | `lab.ts` | Engineering Lab entries and their status |
@@ -97,8 +98,11 @@ Playwright runs on desktop Chromium and a mobile (Pixel 7) profile:
   experience-to-case-study links.
 - **Responsiveness:** no horizontal overflow on every route at 360, 768, 1280, and 1680 px; reduced-motion
   renders final states without animation.
-- **Interactions:** confidence stack selection (pointer and arrow keys), stat count-up, Lab filter, hide-on-scroll
-  header, reading progress, table-of-contents tracking, and the architecture pipeline.
+- **Walkthrough:** scenes change with position and link to the right case study, the final diagram finishes
+  drawing, dots and arrow keys jump between scenes, Play advances and manual input pauses it, and reduced motion
+  lays every scene out with finished diagrams.
+- **Interactions:** confidence stack selection (pointer and arrow keys), stat count-up, Lab filter, reading
+  progress, table-of-contents tracking, and the architecture pipeline.
 - **Accessibility and SEO:** axe WCAG 2.1 AA scan on every route; canonical, Open Graph, JSON-LD, sitemap,
   robots, and OG image.
 

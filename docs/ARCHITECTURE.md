@@ -22,17 +22,19 @@ release confidence. It is built from HTML so it is crisp, accessible, and respon
   on every route.
 - **Layout:** `max-w-7xl` container with 20/32/48 px gutters, a `max-w-3xl` reading measure, and hairline
   dividers in place of heavy cards.
-- **Motion and interaction** (built on `motion`, in `src/components/motion/`):
-  - Hero: word-by-word headline, a pointer-following light, a slow rotating halo, and the interactive confidence
-    stack (hover, click, focus, or arrow keys select a layer; a signal climbs the spine).
-  - Scroll: sections reveal and stagger into view; stats count up; the experience timeline fills; case-study
-    pages have a reading-progress bar, a table of contents that tracks the current section, and an architecture
-    pipeline that lights up stage by stage.
-  - Pointer: cards tilt toward the cursor with a spotlight; primary calls to action are magnetic.
-  - Navigation: soft page transitions; the header hides on scroll down and returns on scroll up; the Lab filter
-    animates between states.
-  - Every effect checks `prefers-reduced-motion` (via `MotionConfig reducedMotion="user"` and `useReducedMotion`)
-    and renders the final state immediately. Touch devices skip pointer-only effects.
+- **Narrated walkthrough** (`src/components/walkthrough/`): the heart of the homepage. Five first-person scenes
+  (risk map, one test across countries and tenants, event flow beneath the UI, release gates, AI with
+  deterministic assertions). The stage stays pinned while the visitor moves through it, and each diagram builds in
+  step with their position, so it reads as Karthik explaining his work. "Play" advances it automatically at a
+  reading pace; scene dots and arrow keys jump between scenes. Narration and beats live in
+  `src/content/walkthrough.ts`; diagrams are inline SVG driven by `motion` values.
+- **Other motion:** continuous and scroll-linked only. The confidence stack is an interactive control, cards tilt
+  toward the pointer with a spotlight, figures count up once, the experience timeline fills, case studies have a
+  reading-progress bar, a tracking table of contents, and an architecture pipeline that lights up once. Section
+  reveals are a single soft rise, with no per-item staggers, loops, pulses, or page fades.
+- Every effect checks `prefers-reduced-motion` (via `MotionConfig reducedMotion="user"` and `useReducedMotion`)
+  and renders the final state immediately. With reduced motion the walkthrough lays its scenes out in sequence
+  with finished diagrams. Touch devices skip pointer-only effects.
 - **Deliberately avoided:** neon glow, heavy glassmorphism, fake terminals, random geometry, and badge walls.
   Technologies are listed as quiet mono text.
 
@@ -82,7 +84,8 @@ canonical and Open Graph fields.
 | TypeScript 5.9, not 7.x | `typescript-eslint` and `eslint-config-next` support 5.x. TS 7 (native) is not yet supported by the lint toolchain |
 | ESLint 9 | `eslint-config-next` 16 ships for ESLint 9 |
 | Cache Components **off** | Every page is static content. With it on, `dynamicParams` is unsupported and unknown slugs return HTTP 200 with a not-found body. Off, they return a real 404 |
-| `motion` (Framer Motion successor) for interaction | Spring physics, scroll-linked values, layout animation and reduced-motion handling in one dependency |
+| `motion` (Framer Motion successor) for interaction | Scroll-linked motion values, layout animation and reduced-motion handling in one dependency |
+| Scroll-scrubbed walkthrough rather than timed animation | Motion tied to the visitor's position reads as explanation; timed pulses and staggers read as flicker |
 | No CMS or MDX | Content is small and typed. TypeScript gives compile-time checks on every edit |
 | Chromium-only E2E (desktop and mobile) | Fast, deterministic CI. Add `firefox` and `webkit` projects in `playwright.config.ts` if wanted |
 | Fonts via `next/font/google` | Self-hosted at build, no layout shift, no runtime request to Google |
