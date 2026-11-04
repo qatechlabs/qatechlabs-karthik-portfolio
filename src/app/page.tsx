@@ -3,6 +3,7 @@ import { walkthrough } from "@/content/walkthrough";
 import { Hero } from "@/components/home/Hero";
 import { CapabilitiesSection, CareerSnapshot, ContactBand, FeaturedWork, PrinciplesSection } from "@/components/home/Sections";
 import { StatsBand } from "@/components/home/StatsBand";
+import { StackSection } from "@/components/home/StackSection";
 import { Walkthrough } from "@/components/walkthrough/Walkthrough";
 import { Guide } from "@/components/guide/Guide";
 
@@ -22,6 +23,7 @@ export default function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
       <Hero />
+      <StackSection />
       <Walkthrough scenes={walkthrough} />
       <StatsBand stats={stats} />
       <FeaturedWork studies={featuredCaseStudies} />

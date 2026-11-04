@@ -4,7 +4,7 @@ import { site } from "../../src/content/site";
 
 /** Routes every page-level test iterates over. Derived from content, so new pages are covered automatically. */
 export const routes: { path: string; heading: RegExp }[] = [
-  { path: "/", heading: /release with confidence/i },
+  { path: "/", heading: /quality engineering architect/i },
   { path: "/about", heading: /quality engineering, treated as engineering/i },
   { path: "/experience", heading: /years across enterprise/i },
   { path: "/case-studies", heading: /how the systems were designed/i },

@@ -82,7 +82,8 @@ src/
   app/                 Routes (App Router), metadata, sitemap, robots, OG image
   components/
     layout/            Header (responsive nav), footer
-    home/              Hero, confidence stack, stats, homepage sections
+    hero/              360° scroll hero: pinned stage, portrait frame sequence, cycling headlines
+    home/              Confidence stack, stats, homepage sections
     case-study/        Card and long-form case study body
     ui/                Container, headings, buttons, placeholders, tags
   content/             Typed content model and all site content
@@ -110,6 +111,7 @@ Playwright runs on desktop Chromium and a mobile (Pixel 7) profile:
 - **Walkthrough:** scenes change with position and link to the right case study, the final diagram finishes
   drawing, dots and arrow keys jump between scenes, Play advances and manual input pauses it, and reduced motion
   lays every scene out with finished diagrams.
+- **360° hero:** the page pins while the portrait turns a full circle under the visitor's scroll and the headline moves through Karthik's roles. The portrait is a frame sequence (see docs/PORTRAIT.md); until it exists a labelled wireframe turns in its place.
 - **Guide and stack order:** the stack executes L01 → L06 then hands over control, Replay restarts it, the hero
   button opens the guide and speaks the introduction with captions, narration follows walkthrough scenes, and
   reduced motion shows the stack complete.

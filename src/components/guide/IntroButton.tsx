@@ -13,7 +13,7 @@ export function IntroButton({ className }: { className?: string }) {
       data-testid="cta-intro"
       onClick={() => void speak(guide.intro, { open: true })}
       className={cn(
-        "inline-flex min-h-11 items-center justify-center gap-2.5 rounded-full border border-rose-500/40 bg-burgundy-900/30 px-5 text-[0.95rem] font-medium text-rose-100 transition-colors hover:border-rose-400 hover:bg-burgundy-900/50",
+        "inline-flex min-h-11 items-center whitespace-nowrap justify-center gap-2.5 rounded-full border border-rose-500/40 bg-burgundy-900/30 px-5 text-[0.95rem] font-medium text-rose-100 transition-colors hover:border-rose-400 hover:bg-burgundy-900/50",
         className,
       )}
     >

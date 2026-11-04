@@ -59,6 +59,23 @@
   }
 }
 
+@keyframes hero-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(260%);
+  }
+}
+.hero-cue {
+  animation: hero-cue 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-cue {
+    animation: none;
+  }
+}
+
 @keyframes guide-blink {
   0%,
   92%,

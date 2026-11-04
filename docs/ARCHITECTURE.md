@@ -28,6 +28,7 @@ release confidence. It is built from HTML so it is crisp, accessible, and respon
   step with their position, so it reads as Karthik explaining his work. "Play" advances it automatically at a
   reading pace; scene dots and arrow keys jump between scenes. Narration and beats live in
   `src/content/walkthrough.ts`; diagrams are inline SVG driven by `motion` values.
+- **360° hero:** `ScrollHero` pins a full-viewport stage for `(headlines + 1) × 100svh` of scroll. `useScroll` progress drives `PortraitSequence`, a canvas that scrubs a preloaded frame sequence (or draws a wireframe placeholder when `hero.portrait.frames` is 0), and selects the headline. Reduced motion renders a still hero. See docs/PORTRAIT.md for producing the frames.
 - **Execution order:** the hero's confidence stack plays once from L01 (UI and mobile) up to L06 (AI-augmented
   workflows) when it scrolls into view, then hands control to the visitor, with a Replay control. The same order
   opens the walkthrough as scene 01.
@@ -79,7 +80,8 @@ and a confidentiality note. Sections with no content are omitted automatically.
   PageHeader, PrintButton).
 - `components/layout`: SiteHeader (the only client component besides PrintButton, for the mobile menu) and
   SiteFooter.
-- `components/home`: Hero, ConfidenceStack, StatsBand, homepage sections.
+- `components/hero`: ScrollHero, PortraitSequence.
+- `components/home`: Hero (wraps ScrollHero), StackSection, ConfidenceStack, StatsBand, homepage sections.
 - `components/case-study`: CaseStudyCard and CaseStudyBody (section registry plus renderers).
 
 Pages are server components that compose these with content. Metadata goes through `lib/seo.ts` for consistent
