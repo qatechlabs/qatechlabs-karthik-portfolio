@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — "Architecture of Confidence"
+ * Midnight navy foundation, burgundy depth, rose-gold accents, warm neutrals.
+ * Contrast: paper-100 on navy-950 ≈ 16:1, mist-300 ≈ 10:1, rose-400 ≈ 9:1.
+ */
+@theme {
+  --color-ink: #060a14;
+  --color-navy-950: #080f1d;
+  --color-navy-900: #0c1629;
+  --color-navy-850: #101c33;
+  --color-navy-800: #15233e;
+  --color-navy-700: #1e2f50;
+  --color-navy-600: #2b3f66;
+
+  --color-burgundy-950: #2a0b15;
+  --color-burgundy-900: #3d1020;
+  --color-burgundy-800: #5a1a2b;
+  --color-burgundy-700: #74223a;
+  --color-burgundy-600: #8e2c47;
+
+  --color-rose-200: #f2dccf;
+  --color-rose-300: #e8c6b3;
+  --color-rose-400: #dbad96;
+  --color-rose-500: #c9967e;
+  --color-rose-600: #a9765f;
+
+  --color-paper-50: #f8f4ef;
+  --color-paper-100: #efe9e2;
+  --color-paper-200: #ddd5cb;
+
+  --color-mist-300: #b9c0ce;
+  --color-mist-400: #939db1;
+  --color-mist-500: #6f7a92;
+
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --text-display: clamp(2.75rem, 1.6rem + 4.6vw, 5.25rem);
+  --text-display--line-height: 1.02;
+  --text-headline: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+  --text-headline--line-height: 1.08;
+
+  --ease-calm: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-rise: rise 0.9s var(--ease-calm) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-navy-950);
+    color: var(--color-paper-100);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "kern";
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-rose-500) 40%, transparent);
+    color: var(--color-paper-50);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-rose-400);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Page-level layered background: deep navy with a faint burgundy bloom. */
+  .bg-atmosphere {
+    background:
+      radial-gradient(60rem 40rem at 85% -10%, color-mix(in oklab, var(--color-burgundy-800) 55%, transparent), transparent 70%),
+      radial-gradient(50rem 30rem at -10% 10%, color-mix(in oklab, var(--color-navy-700) 60%, transparent), transparent 70%),
+      var(--color-navy-950);
+  }
+
+  /* Blueprint grid used sparingly behind hero and diagrams. */
+  .bg-blueprint {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--color-mist-300) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--color-mist-300) 6%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at 60% 40%, black 30%, transparent 75%);
+  }
+
+  .hairline {
+    background: linear-gradient(90deg, transparent, var(--color-rose-500), transparent);
+    height: 1px;
+  }
+
+  .prose-body p + p {
+    margin-top: 1.25rem;
+  }
+}
+
+@media print {
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
